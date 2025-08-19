@@ -15,6 +15,15 @@ body {
   color: #333;
 }
 
+/* Dark mode base */
+.dark {
+  color-scheme: dark;
+}
+.dark body {
+  background-color: #0b1020;
+  color: #e5e7eb;
+}
+
 /* Layout utilities */
 .container {
   max-width: 1200px;
@@ -82,12 +91,24 @@ body {
 .text-gray-900 { color: #111827; }
 .text-primary { color: #3b82f6; }
 
+/* Dark overrides for utility colors */
+.dark .text-gray-900 { color: #e5e7eb; }
+.dark .text-gray-600 { color: #cbd5e1; }
+.dark .text-gray-400 { color: #94a3b8; }
+.dark .text-primary { color: #93c5fd; }
+
 .bg-white { background-color: #ffffff; }
 .bg-gray-50 { background-color: #f9fafb; }
 .bg-gray-900 { background-color: #111827; }
 .bg-primary { background-color: #3b82f6; }
 .bg-primary-50 { background-color: #eff6ff; }
 .bg-primary-100 { background-color: #dbeafe; }
+
+/* Dark overrides for background utilities */
+.dark .bg-white { background-color: #0f172a; }
+.dark .bg-gray-50 { background-color: #0b1020; }
+.dark .bg-gray-900 { background-color: #0b1020; }
+.dark .bg-primary { background-color: #2563eb; }
 
 .border-primary { border-color: #3b82f6; }
 
@@ -98,6 +119,11 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
+}
+
+.dark .nav {
+  background: #0f172a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
 }
 
 .nav-content {
@@ -128,10 +154,22 @@ body {
   color: #3b82f6;
 }
 
+.dark .nav-links a {
+  color: #cbd5e1;
+}
+
+.dark .nav-links a:hover {
+  color: #93c5fd;
+}
+
 /* Hero section */
 .hero {
   background: linear-gradient(to right, #eff6ff, #dbeafe);
   padding: 5rem 0;
+}
+
+.dark .hero {
+  background: linear-gradient(to right, #0f172a, #111827);
 }
 
 .hero h1 {
@@ -184,6 +222,16 @@ body {
   color: white;
 }
 
+.dark .btn-secondary {
+  border-color: #93c5fd;
+  color: #93c5fd;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #1d4ed8;
+  color: white;
+}
+
 /* Grid layouts */
 .grid {
   display: grid;
@@ -203,6 +251,11 @@ body {
   cursor: pointer;
 }
 
+.dark .card {
+  background: #0f172a;
+  border: 1px solid #1f2937;
+}
+
 .card:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
@@ -214,6 +267,11 @@ body {
 
 .card-white:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-white {
+  background: #111827;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
 /* Team member cards */
@@ -231,6 +289,11 @@ body {
   color: #3b82f6;
 }
 
+.dark .team-avatar {
+  background-color: #1f2937;
+  color: #93c5fd;
+}
+
 /* Contact info */
 .contact-item {
   text-align: center;
@@ -246,6 +309,10 @@ body {
   background-color: #111827;
   color: white;
   padding: 2rem 0;
+}
+
+.dark .footer {
+  background-color: #0b1020;
 }
 
 /* Responsive design */
@@ -271,4 +338,9 @@ body {
 /* Transitions */
 .transition {
   transition: all 0.2s ease;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  margin-left: 1rem;
 }

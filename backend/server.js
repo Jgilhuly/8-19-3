@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 // Import routes
 import servicesRouter from './routes/services.js';
@@ -40,12 +42,101 @@ const apiLimiter = rateLimit({
 });
 app.use('/api', apiLimiter);
 
+// Swagger configuration
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'NeuraLink AI Backend API',
+      version: '1.0.0',
+      description: 'API documentation for NeuraLink AI Consultancy Backend',
+      contact: {
+        name: 'NeuraLink AI',
+        email: 'contact@neuralink-ai.com',
+        url: 'https://neuralink-ai.com'
+      },
+      license: {
+        name: 'MIT',
+        url: 'https://opensource.org/licenses/MIT'
+      }
+    },
+    servers: [
+      {
+        url: process.env.NODE_ENV === 'production' ? 'https://your-domain.com' : `http://localhost:${PORT}`,
+        description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server'
+      }
+    ],
+    components: {
+      schemas: {
+        Error: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              description: 'Error type'
+            },
+            message: {
+              type: 'string',
+              description: 'Error message'
+            }
+          }
+        }
+      }
+    }
+  },
+  apis: [
+    './server.js',
+    './routes/*.js'
+  ]
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
+// Swagger UI setup
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customSiteTitle: 'NeuraLink AI API Documentation',
+  customCss: '.swagger-ui .topbar { display: none }',
+  swaggerOptions: {
+    persistAuthorization: true,
+    displayRequestDuration: true,
+    docExpansion: 'none',
+    filter: true,
+    showRequestHeaders: true,
+    tryItOutEnabled: true
+  }
+}));
+
 // Routes
 app.use('/api/services', servicesRouter);
 app.use('/api/team', teamRouter);
 app.use('/api/contact', contactRouter);
 
-// Health check endpoint
+/**
+ * @swagger
+ * /api/health:
+ *   get:
+ *     summary: Health check endpoint
+ *     tags: [System]
+ *     description: Returns the health status of the API
+ *     responses:
+ *       200:
+ *         description: API is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: OK
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                   example: 2024-01-15T10:30:00.000Z
+ *                 service:
+ *                   type: string
+ *                   example: NeuraLink AI Backend
+ */
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -54,7 +145,33 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Basic info endpoint
+/**
+ * @swagger
+ * /api:
+ *   get:
+ *     summary: Get API information
+ *     tags: [System]
+ *     description: Returns basic information about the API and available endpoints
+ *     responses:
+ *       200:
+ *         description: API information retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   example: NeuraLink AI Backend
+ *                 version:
+ *                   type: string
+ *                   example: 1.0.0
+ *                 endpoints:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["/api/health", "/api/services", "/api/team", "/api/contact"]
+ */
 app.get('/api', (req, res) => {
   res.json({
     name: 'NeuraLink AI Backend',

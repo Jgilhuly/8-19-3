@@ -22,11 +22,16 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
-
 app.use(helmet());
+
+// CORS: allow configured origins or fallback to wildcard but support OPTIONS
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+  : '*';
 app.use(
   cors({
-    methods: ['GET', 'POST', 'OPTIONS']
+    origin: corsOrigins,
+    methods: ['GET', 'POST', 'OPTIONS'],
   })
 );
 app.use(morgan('combined'));
@@ -92,19 +97,25 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
-// Swagger UI setup
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  customSiteTitle: 'NeuraLink AI API Documentation',
-  customCss: '.swagger-ui .topbar { display: none }',
-  swaggerOptions: {
-    persistAuthorization: true,
-    displayRequestDuration: true,
-    docExpansion: 'none',
-    filter: true,
-    showRequestHeaders: true,
-    tryItOutEnabled: true
-  }
-}));
+// Swagger UI setup (disabled in production)
+if (process.env.NODE_ENV !== 'production') {
+  app.use(
+    '/docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      customSiteTitle: 'NeuraLink AI API Documentation',
+      customCss: '.swagger-ui .topbar { display: none }',
+      swaggerOptions: {
+        persistAuthorization: true,
+        displayRequestDuration: true,
+        docExpansion: 'none',
+        filter: true,
+        showRequestHeaders: true,
+        tryItOutEnabled: true,
+      },
+    })
+  );
+}
 
 // Routes
 app.use('/api/services', servicesRouter);

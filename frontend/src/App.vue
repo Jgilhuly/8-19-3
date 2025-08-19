@@ -1,37 +1,35 @@
 <template>
   <div id="app">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <div class="text-2xl font-bold text-primary-600">NeuraLink AI</div>
-          </div>
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="#home" class="text-gray-600 hover:text-primary-600 transition-colors">Home</a>
-            <a href="#services" class="text-gray-600 hover:text-primary-600 transition-colors">Services</a>
-            <a href="#team" class="text-gray-600 hover:text-primary-600 transition-colors">Team</a>
-            <a href="#contact" class="text-gray-600 hover:text-primary-600 transition-colors">Contact</a>
+    <nav class="nav">
+      <div class="container">
+        <div class="nav-content">
+          <div class="nav-brand">NeuraLink AI</div>
+          <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
           </div>
         </div>
       </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="bg-gradient-to-r from-primary-50 to-primary-100 py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="home" class="hero">
+      <div class="container">
         <div class="text-center">
-          <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 class="text-5xl font-bold text-gray-900 mb-6">
             Transform Your Business with 
-            <span class="text-primary-600">AI Solutions</span>
+            <span class="text-primary">AI Solutions</span>
           </h1>
-          <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-600 mb-8 mx-auto">
             We help enterprises unlock the power of artificial intelligence through strategic consulting, 
             custom AI development, and intelligent automation solutions.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="btn-primary">Get Started</button>
-            <button class="btn-secondary">Learn More</button>
+          <div class="hero-buttons">
+            <button class="btn btn-primary">Get Started</button>
+            <button class="btn btn-secondary">Learn More</button>
           </div>
         </div>
       </div>
@@ -39,17 +37,17 @@
 
     <!-- Services Section -->
     <section id="services" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="container">
         <div class="text-center mb-16">
           <h2 class="text-4xl font-bold text-gray-900 mb-4">Our AI Services</h2>
           <p class="text-xl text-gray-600">Comprehensive AI solutions tailored to your business needs</p>
         </div>
         
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid grid-3">
           <div 
             v-for="service in services" 
             :key="service.id"
-            class="bg-gray-50 p-8 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            class="card hover-shadow"
           >
             <div class="text-4xl mb-4">{{ service.icon }}</div>
             <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ service.title }}</h3>
@@ -61,23 +59,23 @@
 
     <!-- Team Section -->
     <section id="team" class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="container">
         <div class="text-center mb-16">
           <h2 class="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
           <p class="text-xl text-gray-600">AI experts with deep industry experience</p>
         </div>
         
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid grid-3">
           <div 
             v-for="member in team" 
             :key="member.id"
-            class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+            class="card-white hover-shadow"
           >
-            <div class="w-24 h-24 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span class="text-2xl font-bold text-primary-600">{{ member.initials }}</span>
+            <div class="team-avatar">
+              <span>{{ member.initials }}</span>
             </div>
             <h3 class="text-xl font-semibold text-gray-900 text-center mb-2">{{ member.name }}</h3>
-            <p class="text-primary-600 text-center mb-3">{{ member.role }}</p>
+            <p class="text-primary text-center mb-3">{{ member.role }}</p>
             <p class="text-gray-600 text-center text-sm">{{ member.bio }}</p>
           </div>
         </div>
@@ -86,25 +84,25 @@
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="container">
         <div class="text-center mb-16">
           <h2 class="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
           <p class="text-xl text-gray-600">Ready to transform your business with AI?</p>
         </div>
         
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="text-3xl mb-4">📧</div>
+        <div class="grid grid-3">
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Email</h3>
             <p class="text-gray-600">{{ contactInfo.email }}</p>
           </div>
-          <div class="text-center">
-            <div class="text-3xl mb-4">📞</div>
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Phone</h3>
             <p class="text-gray-600">{{ contactInfo.phone }}</p>
           </div>
-          <div class="text-center">
-            <div class="text-3xl mb-4">📍</div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Location</h3>
             <p class="text-gray-600">{{ contactInfo.location }}</p>
           </div>
@@ -113,8 +111,8 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <footer class="footer">
+      <div class="container text-center">
         <div class="text-2xl font-bold mb-4">NeuraLink AI</div>
         <p class="text-gray-400">© 2024 NeuraLink AI. All rights reserved.</p>
       </div>

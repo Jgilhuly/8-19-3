@@ -11,6 +11,14 @@
             <a href="#team">Team</a>
             <a href="#contact">Contact</a>
           </div>
+          <button
+            class="btn btn-secondary theme-toggle"
+            @click="toggleTheme"
+            aria-label="Toggle dark mode"
+            title="Toggle dark mode"
+          >
+            {{ isDark ? '☀️' : '🌙' }}
+          </button>
         </div>
       </div>
     </nav>
@@ -130,6 +138,23 @@ export default {
     const services = ref([])
     const team = ref([])
     const contactInfo = ref({})
+    const isDark = ref(false)
+
+    const applyTheme = () => {
+      const root = document.documentElement
+      if (isDark.value) {
+        root.classList.add('dark')
+        localStorage.setItem('theme', 'dark')
+      } else {
+        root.classList.remove('dark')
+        localStorage.setItem('theme', 'light')
+      }
+    }
+
+    const toggleTheme = () => {
+      isDark.value = !isDark.value
+      applyTheme()
+    }
 
     const fetchData = async () => {
       try {
@@ -198,12 +223,22 @@ export default {
       }
     }
 
-    onMounted(fetchData)
+    onMounted(() => {
+      // Initialize theme preference
+      const saved = localStorage.getItem('theme')
+      if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        isDark.value = true
+      }
+      applyTheme()
+      fetchData()
+    })
 
     return {
       services,
       team,
-      contactInfo
+      contactInfo,
+      isDark,
+      toggleTheme
     }
   }
 }

@@ -2,6 +2,62 @@ import express from 'express';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     TeamMember:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the team member
+ *           example: 1
+ *         name:
+ *           type: string
+ *           description: Full name of the team member
+ *           example: "Dr. Sarah Chen"
+ *         role:
+ *           type: string
+ *           description: Job title/role
+ *           example: "Chief AI Officer & Founder"
+ *         bio:
+ *           type: string
+ *           description: Biography/description
+ *           example: "PhD in Machine Learning from Stanford. 10+ years leading enterprise AI transformations at Fortune 500 companies."
+ *         initials:
+ *           type: string
+ *           description: Team member initials
+ *           example: "SC"
+ *         expertise:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Areas of expertise
+ *           example: ["Machine Learning", "AI Strategy", "Deep Learning"]
+ *         education:
+ *           type: string
+ *           description: Educational background
+ *           example: "PhD Computer Science, Stanford University"
+ *         experience:
+ *           type: string
+ *           description: Previous work experience
+ *           example: "Former AI Director at Google, Meta"
+ *         linkedin:
+ *           type: string
+ *           description: LinkedIn profile URL
+ *           example: "https://linkedin.com/in/sarahchen-ai"
+ *     TeamMemberNotFound:
+ *       allOf:
+ *         - $ref: '#/components/schemas/Error'
+ *         - type: object
+ *           properties:
+ *             error:
+ *               example: "Team member not found"
+ *             message:
+ *               example: "Team member with ID 1 does not exist"
+ */
+
 // Mock data for team members
 const team = [
   {
@@ -72,12 +128,57 @@ const team = [
   }
 ];
 
-// GET /api/team - Get all team members
+/**
+ * @swagger
+ * /api/team:
+ *   get:
+ *     summary: Get all team members
+ *     tags: [Team]
+ *     description: Retrieve a list of all NeuraLink AI team members
+ *     responses:
+ *       200:
+ *         description: List of team members retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/TeamMember'
+ */
 router.get('/', (req, res) => {
   res.json(team);
 });
 
-// GET /api/team/:id - Get specific team member
+/**
+ * @swagger
+ * /api/team/{id}:
+ *   get:
+ *     summary: Get a specific team member by ID
+ *     tags: [Team]
+ *     description: Retrieve detailed information about a specific team member
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: The team member ID
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Team member retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TeamMember'
+ *       404:
+ *         description: Team member not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TeamMemberNotFound'
+ */
 router.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const member = team.find(m => m.id === id);
@@ -92,7 +193,44 @@ router.get('/:id', (req, res) => {
   res.json(member);
 });
 
-// GET /api/team/expertise/:skill - Get team members by expertise
+/**
+ * @swagger
+ * /api/team/expertise/{skill}:
+ *   get:
+ *     summary: Get team members by expertise
+ *     tags: [Team]
+ *     description: Retrieve team members who have expertise in a specific skill area
+ *     parameters:
+ *       - in: path
+ *         name: skill
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The skill/expertise to search for (case-insensitive)
+ *         example: "machine learning"
+ *     responses:
+ *       200:
+ *         description: Team members with matching expertise retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/TeamMember'
+ *       404:
+ *         description: No team members found with the specified expertise
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Error'
+ *                 - type: object
+ *                   properties:
+ *                     error:
+ *                       example: "No team members found"
+ *                     message:
+ *                       example: 'No team members found with expertise in "machine learning"'
+ */
 router.get('/expertise/:skill', (req, res) => {
   const skill = req.params.skill.toLowerCase();
   const members = team.filter(m => 

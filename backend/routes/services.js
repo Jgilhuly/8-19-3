@@ -2,6 +2,50 @@ import express from 'express';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Service:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for the service
+ *           example: 1
+ *         title:
+ *           type: string
+ *           description: Service title
+ *           example: "AI Strategy Consulting"
+ *         description:
+ *           type: string
+ *           description: Detailed service description
+ *           example: "Strategic roadmaps for AI adoption and digital transformation tailored to your industry and business goals."
+ *         icon:
+ *           type: string
+ *           description: Emoji icon for the service
+ *           example: "🎯"
+ *         features:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of service features
+ *           example: ["AI Readiness Assessment", "Technology Roadmapping", "ROI Analysis", "Risk Assessment"]
+ *         price:
+ *           type: string
+ *           description: Service pricing information
+ *           example: "Starting at $15,000"
+ *     ServiceNotFound:
+ *       allOf:
+ *         - $ref: '#/components/schemas/Error'
+ *         - type: object
+ *           properties:
+ *             error:
+ *               example: "Service not found"
+ *             message:
+ *               example: "Service with ID 1 does not exist"
+ */
+
 // Mock data for AI services
 const services = [
   {
@@ -84,12 +128,57 @@ const services = [
   }
 ];
 
-// GET /api/services - Get all services
+/**
+ * @swagger
+ * /api/services:
+ *   get:
+ *     summary: Get all services
+ *     tags: [Services]
+ *     description: Retrieve a list of all AI services offered by NeuraLink AI
+ *     responses:
+ *       200:
+ *         description: List of services retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Service'
+ */
 router.get('/', (req, res) => {
   res.json(services);
 });
 
-// GET /api/services/:id - Get specific service
+/**
+ * @swagger
+ * /api/services/{id}:
+ *   get:
+ *     summary: Get a specific service by ID
+ *     tags: [Services]
+ *     description: Retrieve detailed information about a specific AI service
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: The service ID
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Service retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Service'
+ *       404:
+ *         description: Service not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ServiceNotFound'
+ */
 router.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const service = services.find(s => s.id === id);
